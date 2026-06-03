@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: "@project.artifactId@"
+  profiles:
+    active: ${PROFILE:dev}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: jdbc:h2:mem:council
+    username: 
+    password:
