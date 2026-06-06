@@ -2,7 +2,11 @@ package com.salomovs.ninjacouncil.model;
 
 import java.time.LocalDate;
 
+import com.salomovs.ninjacouncil.enums.MissionNinjaAssignment;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -32,6 +36,8 @@ public class NinjaMission {
   @JoinColumn(name="ninja_id")
   private Ninja ninja;
 
-  private String assignment;
+  @Enumerated(EnumType.STRING)
+  private MissionNinjaAssignment assignment;
+
   private LocalDate assignmentDate;
 }

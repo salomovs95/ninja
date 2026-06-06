@@ -2,9 +2,9 @@ package com.salomovs.ninjacouncil.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,6 +15,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import com.salomovs.ninjacouncil.enums.MissionRank;
+import com.salomovs.ninjacouncil.enums.MissionStatus;
 
 @Entity
 @Getter
@@ -30,8 +35,12 @@ public class Mission {
   private String title;
   private String description;
   private String village;
-  private String missionRank;
-  private String missionStatus;
+
+  @Enumerated(EnumType.STRING)
+  private MissionRank missionRank;
+
+  @Enumerated(EnumType.STRING)
+  private MissionStatus missionStatus;
 
   @OneToMany(mappedBy="mission")
   @JsonIgnore
