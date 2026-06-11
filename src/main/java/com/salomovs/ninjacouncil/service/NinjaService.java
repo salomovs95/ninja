@@ -18,4 +18,9 @@ public class NinjaService {
     return ninjaRepository.save(req.toEntity());
   }
 
+  public void updateNinjaInfo(Long ninjaId, NinjaRequest req) {
+    Ninja ninja = ninjaRepository.findById(ninjaId).orElseThrow(()->new RuntimeException("Ninja not found!"));
+    ninjaRepository.save(req.fillEntity(ninja));
+  }
+
 }

@@ -17,16 +17,30 @@ public record NinjaRequest (
 ) {
 
   public Ninja toEntity() {
-    return new Ninja(
-      null,
-      name,
-      village,
-      clan,
-      rankNinja,
-      chakraNature,
-      ninjaStatus,
-      null
-    );
+    Ninja ninja = new Ninja();
+    return fillEntity(ninja);
+  }
+
+  public Ninja fillEntity(Ninja ninja) {
+    if (name != null)
+      ninja.setName(name);
+
+    if (clan != null)
+      ninja.setClan(clan);
+
+    if (village != null)
+      ninja.setVillage(village);
+
+    if (rankNinja != null)
+      ninja.setRankNinja(rankNinja);
+
+    if (chakraNature != null)
+      ninja.setChakraNature(chakraNature);
+
+    if (ninjaStatus != null)
+      ninja.setNinjaStatus(ninjaStatus);
+
+    return ninja;
   }
 
 }
