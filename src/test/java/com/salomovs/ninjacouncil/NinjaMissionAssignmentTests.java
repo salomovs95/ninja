@@ -1,9 +1,12 @@
 package com.salomovs.ninjacouncil;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Optional;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,42 +19,41 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.salomovs.ninjacouncil.controller.MissionController;
-import com.salomovs.ninjacouncil.enums.MissionRank;
-import com.salomovs.ninjacouncil.enums.MissionStatus;
 import com.salomovs.ninjacouncil.model.Mission;
+import com.salomovs.ninjacouncil.model.Ninja;
 import com.salomovs.ninjacouncil.repository.MissionRepository;
 import com.salomovs.ninjacouncil.repository.NinjaMissionRepository;
 import com.salomovs.ninjacouncil.repository.NinjaRepository;
 import com.salomovs.ninjacouncil.service.MissionService;
 
-@WebMvcTest({MissionController.class, MissionService.class})
+@WebMvcTest({MissionService.class, MissionController.class})
 @AutoConfigureMockMvc
-public class MissionRegisteringTests {
+public class NinjaMissionAssignmentTests {
 
   @Autowired
-  MockMvc mvc;
+  private MockMvc mvc;
 
   @MockitoBean
-  NinjaRepository ninjaRepository;
+  NinjaRepository ninjaRepo;
 
   @MockitoBean
-  MissionRepository missionRepository;
+  MissionRepository missionRepo;
 
   @MockitoBean
-  NinjaMissionRepository nmRepository;
+  NinjaMissionRepository nmRepo;
 
   @Test
-  void registerMission() {
-    Mission mission = new Mission(999l, "title", "description", "village", MissionRank.A, MissionStatus.OPEN, null);
-    String payload = "{\"title\":\"title\",\"description\":\"description\",\"village\":\"village\",\"rank\":\"A\"}";
+  void assignNinjaToAMission() {
+    String payload = "{\"ninjaId\":999,\"assignment\":\"SENSORIAL\"}";
 
-    when(missionRepository.save(Mockito.any(Mission.class)))
-      .thenReturn(mission);
+    when(ninjaRepo.findById(Mockito.anyLong()))
+      .thenReturn(Optional.of(new Ninja(999l, "name", "village", "clan", null, null, null, null)));
 
-    assertDoesNotThrow(()->{
-      mvc.perform(post("/missions").contentType(MediaType.APPLICATION_JSON).content(payload))
-         .andExpect(status().isCreated());
-    });
+    when(missionRepo.findById(Mockito.anyLong()))
+      .thenReturn(Optional.of(new Mission(999l, "title", "description", "village", null, null, null)));
+  
+    assertDoesNotThrow(()->mvc.perform(post("/missions/9").contentType(MediaType.APPLICATION_JSON).content(payload))
+      .andExpect(status().isCreated()));
   }
 
 }
